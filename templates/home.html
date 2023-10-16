@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home | mail.t2v.ch | miab-tools</title>
+    <link rel="stylesheet" href="/static/css/base.min.css">
+    <link rel="stylesheet" href="/static/css/social.min.css">
+    <style>{% block css %}{% endblock %}</style>
+</head>
+<body>
+    <div class="page">
+        <header>
+            <a href="/"><img class="logo" style="height: 100px;margin-bottom:-10px;" src="https://cdn.t2v.city/content/KQgCslvqJtiMCkBKQmZp/t2v.city/img/packhost.webp" alt="logo" /></a>
+            <a href="/upload"><h2>Upload Resource Pack <span><img src="/static/imgs/external_link.png" style="width: 20px"  alt="files"/></span></h2></a>
+        </header>
+        <main style="text-align: center; margin-top: -20px;">
+    <div id="privacy" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: center;margin-left: 40px;">
+            <h3>{{ stats[0] }}</h3>
+            <p>Packs<br>Uploaded</p>
+        </div>
+        <hr style="width: 1px; height: 60px; margin: 0 17px;">
+        <div style="text-align: center;padding: 0 10px;">
+            <h3>{{ stats[1] }}</h3>
+            <p>Packs<br>Download</p>
+        </div>
+        <hr style="width: 1px; height: 60px; margin: 0 17px;">
+        <div style="text-align: center;margin-right: 40px;">
+            <h3>{{ stats[2] }}</h3>
+            <p>Total<br>Size</p>
+        </div>
+    </div>
+</main>
+        <br>
+        <footer>
+            <p>Powered by<span><a href="https://online.t2v.city">T2V Online Infrastructure</a></span>- 2023 &copy; t2v</p>
+            <br><p>Page Loaded in <span id="pageloadtime">0</span> ms</p>
+        </footer>
+    </div>
+    <script>
+        function updateLocalElement() {
+            const pltEle = document.getElementById('pageloadtime');
+            let time = performance.timing;
+            let pageloadtime = time.loadEventStart - time.navigationStart;
+            pltEle.textContent = pageloadtime;
+        }
+
+        window.onload = updateLocalElement()
+    </script>
+</body>
+</html>

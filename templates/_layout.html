@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/base.min.css">
+    <link rel="stylesheet" href="/static/css/social.min.css">
+    <!-- TODO fix broken css when there are many contents on screen -->
+    <style>{% block css %}{% endblock %}</style>
+    {% block js %}{% endblock %}
+</head>
+<body>
+    <div class="page">
+        <header>
+            <a href="/"><img class="logo" style="height: 100px;margin-bottom:-10px;" src="https://cdn.t2v.city/content/KQgCslvqJtiMCkBKQmZp/t2v.city/img/packhost.webp" alt="logo" /></a>
+            <h1>{% block h1title %}{% endblock %}</h1>
+        </header>
+        <main style="text-align: justify;">
+            <div id="privacy" style="padding: 15px;">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+        <br>
+        <footer>
+            <p><span><a style="cursor: pointer;" onclick="history.back()"><</a></span> | <span><a href="/">home</a></span> | <span><a style="cursor: pointer;" onclick="history.forward()">></a></span></p>
+            <p>Powered by<span><a href="https://online.t2v.city">T2V Online Infrastructure</a></span>- 2023 &copy; t2v</p>
+            <br><p>Page Loaded in <span id="pageloadtime">0</span> ms</p>
+        </footer>
+    </div>
+    <script><!-- TODO fix page loaded time to a more readable time format -->
+        function updateLocalElement() {
+            const pltEle = document.getElementById('pageloadtime');
+            let time = performance.timing;
+            let pageloadtime = time.loadEventStart - time.navigationStart;
+            pltEle.textContent = pageloadtime;
+        }
+
+        window.onload = updateLocalElement()
+    </script>
+</body>
+</html>

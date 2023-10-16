@@ -1,0 +1,116 @@
+{% extends '_layout.html' %}
+{% block title %}Upload | packhost{% endblock title %}
+{% block h1title %}Upload Resource Pack{% endblock h1title %}
+{% block css %}
+input {
+  border: none;
+  background-color: #222;
+  border-radius: 3px;
+  color: #eee;
+  font-size: 12px;
+  width: 85%;
+  line-height: 1.1em;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+#progress-container {
+  display: none;
+  margin-top: 20px;
+}
+#progress-bar {
+  width: 0;
+  height: 20px;
+  background-color: #4CAF50;
+  position: relative;
+}
+#progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+}
+#download-link {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+}
+{% endblock css %}
+{% block js %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=_turnstileCb" async defer></script>{% endblock js %}
+{% block content %}
+<div style="text-align: center">
+    <div style="text-align: left; margin-left: 30px;">
+      <form id="upload-form" method="post" action="/API/v1/GUI/Upload" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".zip">
+          <div class="checkbox mb-3">
+      <!-- The Turnstile widget will be injected in the following div. -->
+      <div id="myWidget"></div>
+      <!-- end. -->
+    </div>
+        <button type="submit" class="loginbutton">Upload ZIP</button>
+      </form>
+    </div>
+    <div id="progress-container">
+      <div id="progress-bar">
+        <div id="progress-text">0%</div>
+      </div>
+    </div>
+    <div id="download-link">
+      <a id="download-button" href="#" class="loginbutton">Download ZIP</a>
+    </div>
+</div>
+<br>
+<br>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('upload-form');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const progressContainer = document.getElementById('progress-container');
+  const downloadLink = document.getElementById('download-link');
+  const downloadButton = document.getElementById('download-button');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.addEventListener('progress', (event) => {
+      const percent = (event.loaded / event.total) * 100;
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent.toFixed(1) + '%';
+    });
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        // Handle the response, e.g., display a success message
+        console.log('Upload successful');
+        // Show the download link
+        downloadLink.style.display = 'block';
+
+        const responseObj = JSON.parse(xhr.responseText);
+        // Modify the download link URL to point to the uploaded file
+        downloadButton.href = `/download/${responseObj.filename}`;
+      }
+    };
+
+    xhr.open('POST', form.action, true);
+    xhr.send(formData);
+
+    // Hide the form and display the progress bar
+    form.style.display = 'none';
+    progressContainer.style.display = 'block';
+  });
+});
+</script>
+<script>
+function _turnstileCb() {
+    console.debug('_turnstileCb called');
+
+    turnstile.render('#myWidget', {
+      sitekey: '0x4AAAAAAALM_WDREmQe2hsI',
+      theme: 'dark',
+    });
+}
+</script>
+{% endblock content %}
