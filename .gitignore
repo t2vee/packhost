@@ -1,0 +1,4 @@
+.env
+uploads
+venv
+test_main.http
